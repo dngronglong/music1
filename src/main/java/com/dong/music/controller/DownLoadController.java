@@ -19,7 +19,7 @@ public class DownLoadController {
     public String download(String name, String url, HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("utf-8");
         response.setCharacterEncoding("utf-8");
-        System.out.println(url);
+        //System.out.println(url);
         URL ul = new URL(url);
         String[] arr = url.split("\\.");
         String type = "." + arr[4];

@@ -33,6 +33,7 @@ public class SessionFilter implements Filter {
         patterns.add(Pattern.compile("login"));
         patterns.add(Pattern.compile("registe"));
         patterns.add(Pattern.compile("register"));
+        patterns.add(Pattern.compile("code"));
         patterns.add(Pattern.compile("main/autoFillty_rj_situation.*"));
         patterns.add(Pattern.compile("main/post.*"));
         patterns.add(Pattern.compile(".*[(\\.js)||(\\.css)||(\\.png)]"));

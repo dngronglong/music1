@@ -38,10 +38,15 @@ public class UserController {
      */
     @ResponseBody
     @PostMapping(value = "/login", produces = {"application/json;charset=utf-8"})
-    public ModelAndView login(String userName, String password, HttpServletRequest rq, HttpServletResponse rp) {
+    public ModelAndView login(String userName, String password,String CheckCode, HttpServletRequest rq, HttpServletResponse rp) {
+        HttpSession session=rq.getSession();
+        //System.out.println(CheckCode+","+session.getAttribute("code"));
+        if (!CheckCode.equalsIgnoreCase(session.getAttribute("code").toString())){
+            return new ModelAndView("redirect:/login");
+        }
         UserBean user = userRepository.findUser(userName, password);
         if (user != null) {
-            HttpSession session=rq.getSession();
+//            HttpSession session=rq.getSession();
             session.setAttribute("user", user);
             return new ModelAndView("redirect:/index");
         }

@@ -63,7 +63,7 @@ public class MusicController {
     @RequestMapping(value = "/findAll")
     public List<SongListBean> findAll(int id){
         List<SongListBean> list=listRepository.findAllByU_id(id);
-        System.out.println(list);
+        //System.out.println(list);
         return list;
     }
     @RequestMapping(value = "/addSong")
@@ -85,7 +85,7 @@ public class MusicController {
         MusicBean musicBean=new MusicBean();
         JSONObject jsonObject=JSONObject.fromObject(json);
         JSONObject jsonObject1=JSONObject.fromObject(jsonObject.get("data"));
-        System.out.println(jsonObject1);
+        //System.out.println(jsonObject1);
         musicBean.setUrl(jsonObject1.getString("play_url"));
         musicBean.setAudio_name(jsonObject1.getString("audio_name"));
         return musicBean;
