@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class RegisterController {
@@ -21,12 +23,17 @@ public class RegisterController {
 
     @ResponseBody
     @PostMapping(value = "/register")
-    public ModelAndView register(String userName,String password,String email){
+    public ModelAndView register(String userName, String password, String email, String CheckCode, HttpServletRequest request){
+        HttpSession session=request.getSession();
         UserBean user=new UserBean();
         user.setEmail(email);
         user.setPwd(password);
         user.setUserName(userName);
-        userRepository.save(user);
-        return new ModelAndView("/login");
+        if (CheckCode.equalsIgnoreCase(session.getAttribute("code").toString())){
+            userRepository.save(user);
+            return new ModelAndView("/login");
+        }
+        return new ModelAndView("/register");
+
     }
 }

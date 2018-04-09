@@ -34,7 +34,7 @@
                     <span>验证码：</span>
                     <input type="text" name="CheckCode" class="login_input verify_input">
                 </li>
-                <img src="images/verify.png" border="0" class="verifyimg" />
+                <img src="${basePath}/code" border="0" class="verifyimg" onclick="changeImg()" />
                 <div class="clearfix"></div>
                 <li class="login-sub">
                     <input type="submit" name="Submit" value="注册" />
@@ -47,6 +47,25 @@
     </div>
 </div>
 <script type="text/javascript">
+    function changeImg() {
+        //alert(11);
+        var imgSrc = $(".verifyimg");
+        var src = imgSrc.attr("src");
+        imgSrc.attr("src", chgUrl(src));
+    }
+
+    // 时间戳
+    // 为了使每次生成图片不一致，即不让浏览器读缓存，所以需要加上时间戳
+    function chgUrl(src) {
+        var timestamp = (new Date()).valueOf();
+        src = src.substring(0, 30);
+        if ((src.indexOf("&") >= 0)) {
+            src = src + "×tamp=" + timestamp;
+        } else {
+            src = src + "?timestamp=" + timestamp;
+        }
+        return src;
+    }
     window.onload = function() {
         var config = {
             vx : 4,
