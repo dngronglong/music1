@@ -24,7 +24,7 @@ $(function () {
     $("#ss").click(function () {
         var words = $("#wd").val();
         $.ajax({
-            url: '../mic/search',
+            url: '${basePath}/mic/search',
             type: 'POST', //GET
             async: true,    //或false,是否异步
             data: "words=" + words,
@@ -86,7 +86,7 @@ function play(hash) {
     var song = [];
     var lrc_content="";
     $.ajax({
-        url: '../mic/play',
+        url: '${basePath}/mic/play',
         type: 'POST', //GET
         async: true,    //或false,是否异步
         data: "hash=" + hash,
@@ -121,11 +121,11 @@ function download(fileHash,hqHash,sqHash) {
     }else {
         $("input[name='downloadmusic']:eq(1)").attr("disabled","");
     }
-    // if (sqHash!="00000000000000000000000000000000"){
-    //     $("input[name='downloadmusic']:eq(2)").val(sqHash);
-    // }else {
-    //     $("input[name='downloadmusic']:eq(2)").attr("disabled","");
-    // }
+    if (sqHash!="00000000000000000000000000000000"){
+        $("input[name='downloadmusic']:eq(2)").val(sqHash);
+    }else {
+        $("input[name='downloadmusic']:eq(2)").attr("disabled","");
+    }
         var index=layer.open({
             type:1,
             title:"下载",
@@ -133,7 +133,7 @@ function download(fileHash,hqHash,sqHash) {
             yes: function () {
                 var hash=$("input[name='downloadmusic']:checked").val();
                 $.ajax({
-                    url: '../mic/getUrl',
+                    url: '${basePath}/mic/getUrl',
                     type: 'POST', //GET
                     async: true,    //或false,是否异步
                     data: "hash="+hash,
@@ -174,7 +174,7 @@ function add(hash,name,id) {
             yes: function () {
                 //alert(category);
                 $.ajax({
-                    url: '../mic/addSong',
+                    url: '${basePath}/mic/addSong',
                     type: 'POST', //GET
                     async: true,    //或false,是否异步
                     data: {"name":name,"hash":hash,"id":category},
@@ -203,7 +203,7 @@ function xs(id,index_id) {
         if (divs[i].id == "d"+(index_id) ){
             divs[i].style.display="";
             $.ajax({
-                url: '../mic/s_list',
+                url: '${basePath}/mic/s_list',
                 type: 'POST', //GET
                 async: true,    //或false,是否异步
                 data: {"userId":userId,"listId":id},
@@ -232,13 +232,5 @@ function qk() {
 }
 function downloadFile(url,name,type){
     //alert(url);
-    window.open("../download?name="+name+"&url="+url);
-}
-function downloadFileByForm(name,url1) {
-    console.log("ajaxDownloadSynchronized");
-    var url = "../download?name="+name+"&url="+url1;
-    var fileName = name;
-    var form = $("<form></form>").attr("action", url).attr("method", "post");
-    form.append($("<input></input>").attr("type", "hidden").attr("name", "fileName").attr("value", fileName));
-    form.appendTo('body').submit().remove();
+    window.open("${basePath}/download?name="+name+"&url="+url);
 }

@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <link rel="stylesheet" href="../css/reset.css" />
-    <link rel="stylesheet" href="./css/login.css" />
-    <script type="text/javascript" src="../js/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/login.js"></script>
+    <link rel="stylesheet" href="${basePath}/css/reset.css" />
+    <link rel="stylesheet" href="${basePath}/css/login.css" />
+    <script type="text/javascript" src="${basePath}/js/jquery.min.js"></script>
+    <script type="text/javascript" src="${basePath}/js/login.js"></script>
 </head>
 <body>
 <div class="page">
@@ -82,6 +82,6 @@
         CanvasParticle(config);
     }
 </script>
-<script type="text/javascript" src="../js/canvas-particle.js"></script>
+<script type="text/javascript" src="${basePath}/js/canvas-particle.js"></script>
 </body>
 </html>

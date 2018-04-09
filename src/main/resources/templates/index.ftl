@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>音乐小站</title>
-    <link rel="stylesheet" href="../css/layui.css">
-    <link rel="stylesheet" type="text/css" href="../css/audio.css">
+    <link rel="stylesheet" href="${basePath}/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="${basePath}/css/audio.css">
 </head>
 <input id="userId" type="hidden" value="${user.id}">
 <body class="layui-layout-body">
@@ -15,7 +15,7 @@
             <div class="layui-input-block">
                 <input type="radio" name="downloadmusic" value="hash" title="标准品质" checked="">
                 <input type="radio" name="downloadmusic" value="HQHash" title="HQ高品质">
-                <#--<input type="radio" name="downloadmusic" value="SQHash" title="SQ无损品质">-->
+                <input type="radio" name="downloadmusic" value="SQHash" title="SQ无损品质">
             </div>
         </div>
     </form>
@@ -58,7 +58,7 @@
                 <dl class="layui-nav-child">
                     <dd><a href="">基本资料</a></dd>
                     <dd><a href="">安全设置</a></dd>
-                    <dd><a href="/exit">退出</a></dd>
+                    <dd><a href="${basePath}/exit">退出</a></dd>
                 </dl>
             </li>
 
@@ -172,11 +172,11 @@
 
 </div>
 
-<script src="../js/layui.js"></script>
-<script type="text/javascript" src="../js/jquery.min.js"></script>
-<script type="text/javascript" src="../js/audio.js"></script>
-<script type="text/javascript" src="../js/MyMusic.js"></script>
-<script type="text/javascript" src="../js/jquery.blurr.js"></script>
+<script src="${basePath}/js/layui.js"></script>
+<script type="text/javascript" src="${basePath}/js/jquery.min.js"></script>
+<script type="text/javascript" src="${basePath}/js/audio.js"></script>
+<script type="text/javascript" src="${basePath}/js/MyMusic.js"></script>
+<script type="text/javascript" src="${basePath}/js/jquery.blurr.js"></script>
 <script>
     var id =${user.id};
     $("#addList").click(function () {
@@ -193,7 +193,7 @@
                 layer.close(index);
                 $.ajax({
                     type: "post",
-                    url: "/mic/addList",
+                    url: "${basePath}/mic/addList",
                     data: {"listName": value, "id": id},
                     async: true,
                     success: function () {
@@ -201,7 +201,7 @@
                         $("#lb").empty();
                         $.ajax({
                             type: "post",
-                            url: "../mic/findAll",
+                            url: "${basePath}/mic/findAll",
                             data: "id="+id,
                             async: true,
                             dataType: "json",
@@ -274,7 +274,7 @@
         //console.log(audioFn.audio);
     });
 </script>
-<script type="text/javascript" src="../js/MyMusic.js"></script>
+<script type="text/javascript" src="${basePath}/js/MyMusic.js"></script>
 </body>
 
 </html>
