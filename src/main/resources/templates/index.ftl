@@ -37,14 +37,15 @@
 </div>
 <div id="zhe">
     <!--//遮罩层-->
+    <div id="img" style="float: left;width: 110%;height: 110%;z-index: 1"></div>
+    <div id="ct" style="float: left;position: absolute;width: 100%;height: 100%;z-index: 9">
     <i class="layui-icon" id="yinCang" style="font-size: 30px; color: #1E9FFF;">&#xe61a;</i>
     <div id="lyric_txt" class="test test-1"
          style="height: 500px;width:500px;text-align: center;margin: 0 auto;color: silver">
         <div class="scrollbar"></div>
     </div>
-    <textarea id="lrc_content" name="textfield" cols="70" rows="10" style="height:200px;display:none;z-index: 9;">
-
-    </textarea>
+    <textarea id="lrc_content" name="textfield" cols="70" rows="10" style="height:200px;display:none;z-index: 9;"></textarea>
+    </div>
 </div>
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
@@ -169,6 +170,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" value="${basePath}" id="basePath">
 
 </div>
 
@@ -258,6 +260,7 @@
 
 
     $(function () {
+        //var div=$("#zhe");
         /* 暂停播放 */
         //audioFn.stopAudio();
 
