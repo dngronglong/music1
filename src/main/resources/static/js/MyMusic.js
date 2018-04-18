@@ -164,33 +164,21 @@ function renderForm(){
 }
 //添加到歌单
 function add(hash,name,id) {
-//     $.ajax({
-//         url: basePath + '/mic/findAll',
-//         type: 'POST', //GET
-//         async: true,    //或false,是否异步
-//         data: "id=" + userId,
-//         dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-//         success: function (data) {
-//             $("#optiona").html("");
-//             console.log(data);
-//             for (var i=0;i<data.length;i++){
-// //id='"+data[i].name+"' value='"+data[i].id+"'
-//                 $("#optiona").append("<option >"+data[i].name+"</option>");
-//
-//             }
-//             renderForm();//表单重新渲染，要不然添加完显示不出来新的option
-//         }
-//
-//     });
-    var category=0;
-    var categoryName='';
-    var form = layui.form;
-        form.on('select(interest)', function (data) {
-            category = data.value;
-            categoryName = data.elem[data.elem.selectedIndex].text;
-            form.render('select');
-        });
+    $.ajax({
+        url: basePath + '/mic/findAll',
+        type: 'POST', //GET
+        async: true,    //或false,是否异步
+        data: "id=" + userId,
+        dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+        success: function (data) {
+            $("#optiona").html("");
+            console.log(data);
+            for (var i=0;i<data.length;i++){
+                $("#optiona").append("<option id='"+data[i].name+"' value='"+data[i].id+"'>"+data[i].name+"</option>");
 
+            }
+        }
+    });
 
     layui.use('layer',function () {
         var layer = layui.layer;
@@ -199,6 +187,8 @@ function add(hash,name,id) {
             title:"选择要添加的列表",
             btn: ['确定', '取消'], //可以无限个按钮
             yes: function () {
+                var category=$("#optiona option:selected").val();
+                // alert(category);
                 //alert(category);
                 $.ajax({
                     url: basePath+'/mic/addSong',

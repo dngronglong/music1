@@ -6,6 +6,7 @@
     <title>音乐小站</title>
     <link rel="stylesheet" href="${basePath}/css/layui.css">
     <link rel="stylesheet" type="text/css" href="${basePath}/css/audio.css">
+    <link rel="stylesheet" type="text/css" href="${basePath}/css/bootstrap.min.css">
 </head>
 <input id="userId" type="hidden" value="${user.id}">
 <body class="layui-layout-body">
@@ -21,20 +22,13 @@
     </form>
 </div>
 <div id="box1" style="display: none;overflow:hidden;height: 500px;width: 300px">
-    <form class="layui-form">
-        <div class="layui-form-item">
-            <label class="layui-form-label">选择列表</label>
-            <div class="layui-input-none" lay-filter="selFilter">
-                <select name="interest" lay-verify="required" id="optiona">
-                    <option value=""></option>
-
-                <#--<#list list as ll>-->
-                    <#--<option id="${ll.name}" value="${ll.id}">${ll.name}</option>-->
-                <#--</#list>-->
-                </select>
-            </div>
-        </div>
-    </form>
+    <select class="form-control" id="optiona">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+    </select>
 </div>
 <div id="zhe">
     <!--//遮罩层-->

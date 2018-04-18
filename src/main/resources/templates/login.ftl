@@ -45,7 +45,6 @@
 </div>
 <script type="text/javascript">
     function changeImg() {
-        //alert(11);
         var imgSrc = $(".verifyimg");
         var src = imgSrc.attr("src");
         imgSrc.attr("src", chgUrl(src));
@@ -55,7 +54,7 @@
     // 为了使每次生成图片不一致，即不让浏览器读缓存，所以需要加上时间戳
     function chgUrl(src) {
         var timestamp = (new Date()).valueOf();
-        src = src.substring(0, 30);
+        src = src.substring(0, 40);
         if ((src.indexOf("&") >= 0)) {
             src = src + "×tamp=" + timestamp;
         } else {

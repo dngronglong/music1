@@ -27,7 +27,7 @@ window.onload=function (ev) {
             }
             layui.use('layer', function () {
                 var layer = layui.layer;
-                layer.alert("1.优化了页面的加载速度及逻辑<br> 2.添加歌曲到列表暂时不能使用等待修复");
+                layer.alert("1.优化了页面的加载速度及逻辑<br> 2.修复添加歌曲到列表");
             })
         }
     })
