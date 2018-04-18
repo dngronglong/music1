@@ -2,6 +2,7 @@ package com.dong.music.controller;
 
 import com.dong.music.repository.UserRepository;
 import com.dong.music.beans.UserBean;
+import com.dong.music.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,8 @@ import java.io.IOException;
 public class UserController {
     @Resource
     private UserRepository userRepository;
-
+    @Resource
+    private UserService userService;
     /**
      * 返回登录页面
      * @return
@@ -40,13 +42,15 @@ public class UserController {
     @PostMapping(value = "/login", produces = {"application/json;charset=utf-8"})
     public ModelAndView login(String userName, String password,String CheckCode, HttpServletRequest rq, HttpServletResponse rp) {
         HttpSession session=rq.getSession();
-        //System.out.println(CheckCode+","+session.getAttribute("code"));
         if (!CheckCode.equalsIgnoreCase(session.getAttribute("code").toString())){
             return new ModelAndView("redirect:/login");
         }
-        UserBean user = userRepository.findUser(userName, password);
+        UserBean u=new UserBean();
+        u.setUserName(userName);
+        u.setPwd(password);
+        UserBean user=userService.findUser(u);
+        System.out.println(user);
         if (user != null) {
-//            HttpSession session=rq.getSession();
             session.setAttribute("user", user);
             return new ModelAndView("redirect:/index");
         }

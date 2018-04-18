@@ -20,16 +20,17 @@
         </div>
     </form>
 </div>
-<div id="box1" style="display: none;overflow:hidden;height: 30%">
+<div id="box1" style="display: none;overflow:hidden;height: 500px;width: 300px">
     <form class="layui-form">
         <div class="layui-form-item">
             <label class="layui-form-label">选择列表</label>
-            <div class="layui-input-none">
-                <select name="interest" lay-filter="interest">
+            <div class="layui-input-none" lay-filter="selFilter">
+                <select name="interest" lay-verify="required" id="optiona">
                     <option value=""></option>
-                <#list user.list as ll>
-                    <option id="${ll.name}" value="${ll.id}">${ll.name}</option>
-                </#list>
+
+                <#--<#list list as ll>-->
+                    <#--<option id="${ll.name}" value="${ll.id}">${ll.name}</option>-->
+                <#--</#list>-->
                 </select>
             </div>
         </div>
@@ -54,7 +55,7 @@
             <li class="layui-nav-item">
                 <a href="javascript:;">
                     <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                ${user.userName}
+                ${user.loginName}
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a href="">基本资料</a></dd>
@@ -74,9 +75,9 @@
                 <li class="layui-nav-item layui-nav-itemed">
                     <a class="" href="javascript:;">我的云歌单</a>
                     <dl class="layui-nav-child" id="lb">
-                        <#list user.list as list>
-                            <dd><a href="javascript:xs('${list.id}','${list_index}');">${list.name}</a></dd>
-                        </#list>
+                        <#--<#list user.list as list>-->
+                            <#--<dd><a href="javascript:xs('${list.id}','${list_index}');">${list.name}</a></dd>-->
+                        <#--</#list>-->
                     </dl>
                 </li>
                 <li class="layui-nav-item"><a href="javascript:qk();">曲库</a></li>
@@ -107,23 +108,6 @@
             </table>
         </div>
         </div>
-        <#list user.list as list>
-
-            <div id="d${list_index}" name="b_content" style="padding: 15px;display: none" >
-                <label>${list.name}</label>
-                <table class="layui-table" lay-skin="line">
-                    <thead>
-                    <tr>
-                        <th>歌名</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody id="list${list_index}">
-
-                    </tbody>
-                </table>
-            </div>
-        </#list>
     </div>
     <div class="layui-footer" style="background: #0C0C0C;height: 70px;z-index: 10">
         <div class="audio-box">
@@ -179,12 +163,11 @@
 <script type="text/javascript" src="${basePath}/js/audio.js"></script>
 <script type="text/javascript" src="${basePath}/js/MyMusic.js"></script>
 <script type="text/javascript" src="${basePath}/js/jquery.blurr.js"></script>
+<script type="text/javascript" src="${basePath}/js/loadList.js"></script>
 <script>
     var id =${user.id};
     $("#addList").click(function () {
-        //alert(11);
         var element = layui.element;
-    <#--alert(${user.id});-->
         layui.use('layer', function () {
             var layer = layui.layer;
             layer.prompt({
@@ -193,6 +176,7 @@
                 title: '请输入要添加的列表'
             }, function (value, index, elem) {
                 layer.close(index);
+                var lbId=$("#lb").children.length;
                 $.ajax({
                     type: "post",
                     url: "${basePath}/mic/addList",
@@ -208,11 +192,23 @@
                             async: true,
                             dataType: "json",
                             success: function (data) {
-                                $(".layui-body").append("<div id='d"+data[0].id+"' name=\"b_content\" style=\"padding: 15px;display: none\"></div>");
+                                $(".layui-body").append("<div id='d"+(data.length-1)+"' name='b_content' style='padding: 15px;display: none' >\n" +
+                                        "                <label>"+data[data.length-1].name+"</label>\n" +
+                                        "                <table class='layui-table' lay-skin='line'>\n" +
+                                        "                    <thead>\n" +
+                                        "                    <tr>\n" +
+                                        "                        <th>歌名</th>\n" +
+                                        "                        <th>操作</th>\n" +
+                                        "                    </tr>\n" +
+                                        "                    </thead>\n" +
+                                        "                    <tbody id=\"list"+(data.length-1)+"\">\n" +
+                                        "\n" +
+                                        "                    </tbody>\n" +
+                                        "                </table>\n" +
+                                        "            </div>");
                                 for (var i = 0; i < data.length; i++) {
-                                    // console.log(data);
-                                    $("#lb").append("<dd><a href='javascript:xs(\""+data[i].id+"\",\""+data[i].u_id+"\");'>" + data[i].name + "</a></dd>");
-
+                                     console.log(data);
+                                    $("#lb").append("<dd><a href='javascript:xs(\""+data[i].id+"\",\""+i+"\");'>" + data[i].name + "</a></dd>");
                                     element.init();
                                 }
                             }

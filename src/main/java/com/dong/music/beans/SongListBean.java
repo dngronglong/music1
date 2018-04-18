@@ -1,11 +1,12 @@
 package com.dong.music.beans;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "user_list")
-public class SongListBean {
+public class SongListBean implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

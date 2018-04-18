@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dong.music.mapper.UserMapper" >
+    <resultMap id="BaseResultMap" type="com.dong.music.beans.UserBean" >
+        <id column="id" property="id" />
+        <result column="user_name" property="userName" />
+        <result column="pwd" property="pwd" />
+        <result column="email" property="email"/>
+        <result column="login_name" property="loginName" />
+    </resultMap>
+    <select id="findUser" parameterType="com.dong.music.beans.UserBean" resultMap="BaseResultMap">
+        SELECT u.id,u.user_name,u.pwd,u.email,u.login_name FROM user as u where u.user_name=#{userName} and u.pwd=#{pwd}
+    </select>
+    <select id="findUserByUserName" parameterType="String" resultMap="BaseResultMap">
+        SELECT u.user_name FROM USER as u WHERE u.user_name=#{userName}
+    </select>
+
+</mapper>

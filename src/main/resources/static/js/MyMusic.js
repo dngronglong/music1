@@ -1,4 +1,5 @@
 var basePath=$("#basePath").val();
+var userId=$("#userId").val();
 //歌词处理
 function lyric_ctrl(lrc_content) {
     //console.log(lrc_content);
@@ -154,8 +155,33 @@ function download(fileHash,hqHash,sqHash) {
             content:$("#download"),
         });
 }
+//重新渲染表单
+function renderForm(){
+    layui.use('form', function(){
+        var form = layui.form();//高版本建议把括号去掉，有的低版本，需要加()
+        form.render();
+    });
+}
 //添加到歌单
 function add(hash,name,id) {
+//     $.ajax({
+//         url: basePath + '/mic/findAll',
+//         type: 'POST', //GET
+//         async: true,    //或false,是否异步
+//         data: "id=" + userId,
+//         dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+//         success: function (data) {
+//             $("#optiona").html("");
+//             console.log(data);
+//             for (var i=0;i<data.length;i++){
+// //id='"+data[i].name+"' value='"+data[i].id+"'
+//                 $("#optiona").append("<option >"+data[i].name+"</option>");
+//
+//             }
+//             renderForm();//表单重新渲染，要不然添加完显示不出来新的option
+//         }
+//
+//     });
     var category=0;
     var categoryName='';
     var form = layui.form;

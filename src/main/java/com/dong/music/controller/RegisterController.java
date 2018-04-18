@@ -23,9 +23,10 @@ public class RegisterController {
 
     @ResponseBody
     @PostMapping(value = "/register")
-    public ModelAndView register(String userName, String password, String email, String CheckCode, HttpServletRequest request){
+    public ModelAndView register(String loginName,String userName, String password, String email, String CheckCode, HttpServletRequest request){
         HttpSession session=request.getSession();
         UserBean user=new UserBean();
+        user.setLoginName(loginName);
         user.setEmail(email);
         user.setPwd(password);
         user.setUserName(userName);

@@ -5,12 +5,16 @@ import com.dong.music.beans.SongBean;
 import com.dong.music.beans.SongListBean;
 import com.dong.music.repository.ListRepository;
 import com.dong.music.repository.SongRepository;
+import com.dong.music.service.SongListService;
+import com.dong.music.utils.RedisUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import com.dong.music.utils.GetUrl;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +26,14 @@ public class MusicController {
     private ListRepository listRepository;
     @Resource
     private SongRepository songRepository;
+    @Resource
+    private SongListService songListService;
+    @Resource
+    private RedisUtils redisUtils;
+
+    private int userId;
+
+
     @RequestMapping(value = "/search",method= RequestMethod.POST,produces= {"application/json;charset=utf-8"})
     @ResponseBody
     public List<MusicBean> search(String words) {
@@ -59,11 +71,20 @@ public class MusicController {
         songListBean.setName(listName);
         songListBean.setU_id(id);
         listRepository.saveAndFlush(songListBean);
+        redisUtils.remove("user"+userId+"SongList");
+        redisUtils.setObjectList("user"+userId+"SongList",songListService.findSongListByUserId(userId));
     }
     @RequestMapping(value = "/findAll")
     public List<SongListBean> findAll(int id){
-        List<SongListBean> list=listRepository.findAllByU_id(id);
-        //System.out.println(list);
+        userId=id;
+        List<SongListBean> list=new ArrayList<>();
+        if(redisUtils.exists("user"+id+"SongList")){
+            list= redisUtils.getObbjectList("user"+id+"SongList");
+            System.out.println(list+"使用了缓存");
+        }else{
+            list=songListService.findSongListByUserId(id);
+            System.out.println("使用了数据库");
+        }
         return list;
     }
     @RequestMapping(value = "/addSong")

@@ -9,12 +9,14 @@ public class UserBean {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    private String user_name;
-
+    //用户登陆名
+    private String userName;
+    //用户密码
     private String pwd;
-
+    //用户邮箱
     private String email;
+    //显示的名字
+    private String loginName;
     //列表名字
     @OneToMany(cascade = {CascadeType.ALL})
     @JoinColumn(name = "u_id")
@@ -22,10 +24,12 @@ public class UserBean {
     public UserBean() {
     }
 
-    public UserBean(String userName, String pwd, String email) {
-        this.user_name = userName;
-        this.pwd = pwd;
-        this.email = email;
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 
     public int getId() {
@@ -46,11 +50,11 @@ public class UserBean {
     }
 
     public String getUserName() {
-        return user_name;
+        return userName;
     }
 
     public void setUserName(String userName) {
-        this.user_name = userName;
+        this.userName = userName;
     }
 
     public String getPwd() {
@@ -73,9 +77,10 @@ public class UserBean {
     public String toString() {
         return "UserBean{" +
                 "id=" + id +
-                ", user_name='" + user_name + '\'' +
+                ", userName='" + userName + '\'' +
                 ", pwd='" + pwd + '\'' +
                 ", email='" + email + '\'' +
+                ", loginName='" + loginName + '\'' +
                 ", list=" + list +
                 '}';
     }
