@@ -1,5 +1,6 @@
 package com.dong.music.controller;
 
+import com.dong.music.beans.LayBean;
 import com.dong.music.beans.MusicBean;
 import com.dong.music.beans.SongBean;
 import com.dong.music.beans.SongListBean;
@@ -34,9 +35,10 @@ public class MusicController {
     private int userId;
 
 
-    @RequestMapping(value = "/search",method= RequestMethod.POST,produces= {"application/json;charset=utf-8"})
+    @GetMapping(value = "/search",produces= {"application/json;charset=utf-8"})
     @ResponseBody
-    public List<MusicBean> search(String words) {
+    public LayBean search(String words,int page,int limit) {
+        //System.out.println(words);
         JSONObject jsonObject=JSONObject.fromObject(GetUrl.getJson(words).replace("<em>","").replace("<\\/em>",""));
         JSONObject jsonObject1=JSONObject.fromObject(jsonObject.get("data"));
         JSONArray jsonObject2=JSONArray.fromObject(jsonObject1.get("lists"));
@@ -51,7 +53,11 @@ public class MusicController {
             musicBean.setSqHash(jsonObject2.getJSONObject(i).getString("SQFileHash"));
             musicList.add(musicBean);
         }
-        return musicList;
+        LayBean layBean=new LayBean();
+        layBean.setCode("0");
+        layBean.setData(musicList);
+        //System.out.println(layBean);
+        return layBean;
     }
     @RequestMapping("/play")
     public MusicBean play(String hash){

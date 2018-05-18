@@ -1,5 +1,6 @@
 var basePath=$("#basePath").val();
 var userId=$("#userId").val();
+var staes=0;
 window.onload=function (ev) {
     $.ajax({
         url: basePath + '/mic/findAll',
@@ -25,10 +26,15 @@ window.onload=function (ev) {
                     "                </table>\n" +
                     "            </div>");
             }
-            layui.use('layer', function () {
-                var layer = layui.layer;
-                layer.alert("1.优化了页面的加载速度及逻辑<br> 2.修复添加歌曲到列表");
-            })
+            if(staes===0){
+                layui.use('layer', function () {
+                    var layer = layui.layer;
+                    layer.msg("1.优化了页面的加载速度及逻辑<br> 2.修复添加歌曲到列表");
+                })
+                staes++;
+                //layer.msg(staes);
+            }
+
         }
     })
 }

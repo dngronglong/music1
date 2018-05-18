@@ -1,6 +1,7 @@
 var basePath=$("#basePath").val();
 var userId=$("#userId").val();
 //歌词处理
+
 function lyric_ctrl(lrc_content) {
     //console.log(lrc_content);
     var lyricObj = lrc_content;
@@ -25,28 +26,23 @@ function lyric_ctrl(lrc_content) {
 $(function () {
     $("#ss").click(function () {
         var words = $("#wd").val();
-        $.ajax({
-            url: basePath+"/mic/search",
-            type: 'POST', //GET
-            async: true,    //或false,是否异步
-            data: "words=" + words,
-            dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-            success: function (data) {
-                $("#list").empty();
-                $("#count").text(data.length);
-                for (var i = 0; i < data.length; i++) {
-                    //console.log(data);
-                    var hash=data[i].fileHash+"";
-                    var hqHash=data[i].hqHash;
-                    var sqHash=data[i].sqHash;
-                    var songName=data[i].musicName+"-"+data[i].singer;
-                    var id=$("#data").val();
-                    //console.log(hash);
-                    $("#list").append("<tr class='lb' fileHash='"+data[i].fileHash+"' hqHash='"+data[i].hqHash+"' sqHash='"+data[i].sqHash+"'><td>"+data[i].musicName+"</td><td>"+data[i].singer+"</td><td>"+data[i].album+"</td><td><button class='layui-icon' style='font-size: 30px; color: #1E9FFF;' onclick='add(\""+hash+"\",\""+songName+"\","+id+");'>&#xe61f;</button><button class='layui-icon' onclick='download(\""+hash+"\",\""+hqHash+"\",\""+sqHash+"\");' style='font-size: 30px; color: #1E9FFF;'>&#xe601;</button><button onclick='play(\""+hash+"\")' class='layui-icon' style='font-size: 30px; color: #1E9FFF;'>&#xe652;</button></td></tr>");
-                }
+        layui.use('table', function(){
+            var table = layui.table;
+            table.render({
+                elem: '#musicList'
+                //,height: 315
+                ,where:{"words":words}
+                ,url: basePath+"/mic/search" //数据接口
+                //,page: true //开启分页
+                ,cols: [[ //表头
+                    {field: 'musicName', title: '歌曲',sort: true, fixed: 'left'}
+                    ,{field: 'singer', title: '歌手'}
+                    ,{field: 'album', title: '专辑', sort: true}
+                    ,{field: 'right', title: '操作',align:'center', toolbar: '#music'}
+                ]]
+            });
 
-            }
-        })
+        });
     })
 
 });
@@ -171,11 +167,17 @@ function add(hash,name,id) {
         data: "id=" + userId,
         dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
         success: function (data) {
-            $("#optiona").html("");
+            //$("#songList").html("");
             console.log(data);
-            for (var i=0;i<data.length;i++){
-                $("#optiona").append("<option id='"+data[i].name+"' value='"+data[i].id+"'>"+data[i].name+"</option>");
+            var root=document.getElementById("songList");
 
+            for (var i=0;i<data.length;i++){
+                //$("#songList").append("<option id='"+data[i].name+"' value='"+data[i].id+"'>"+data[i].name+"</option>");
+                var option=document.createElement("option");
+                option.setAttribute("value",data[i].id);
+                option.innerText=data[i].name;
+                root.appendChild(option);
+                form.render('select');
             }
         }
     });
@@ -187,7 +189,7 @@ function add(hash,name,id) {
             title:"选择要添加的列表",
             btn: ['确定', '取消'], //可以无限个按钮
             yes: function () {
-                var category=$("#optiona option:selected").val();
+                var category=$("#songList option:selected").val();
                 // alert(category);
                 //alert(category);
                 $.ajax({

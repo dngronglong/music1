@@ -6,7 +6,7 @@
     <title>音乐小站</title>
     <link rel="stylesheet" href="${basePath}/css/layui.css">
     <link rel="stylesheet" type="text/css" href="${basePath}/css/audio.css">
-    <link rel="stylesheet" type="text/css" href="${basePath}/css/bootstrap.min.css">
+    <#--<link rel="stylesheet" type="text/css" href="${basePath}/css/bootstrap.min.css">-->
 </head>
 <input id="userId" type="hidden" value="${user.id}">
 <body class="layui-layout-body">
@@ -21,14 +21,17 @@
         </div>
     </form>
 </div>
-<div id="box1" style="display: none;overflow:hidden;height: 500px;width: 300px">
-    <select class="form-control" id="optiona">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-    </select>
+<div id="box1" style="display: none;overflow:hidden;height: 500px;width: 400px">
+    <form class="layui-form" action="">
+    <div class="layui-inline">
+        <label class="layui-form-label">搜索选择框</label>
+        <div class="layui-input-inline">
+            <select name="modules" lay-verify="required" lay-search="" id="songList">
+                <option value="">选择列表</option>
+            </select>
+        </div>
+    </div>
+    </form>
 </div>
 <div id="zhe">
     <!--//遮罩层-->
@@ -80,28 +83,21 @@
         </div>
     </div>
     <div class="layui-body">
-        <div id="ss_content" name="b_content">
-        <input class="layui-input" type="text" id="wd" style="width: 200px">
-        <button class="layui-btn" type="button" id="ss">搜索</button>
+        <blockquote class="layui-elem-quote">
+        <div id="ss_content" name="b_content" style="margin-top: 20px;">
+        <input class="layui-input" type="text" id="wd" style="width: 200px;float: left">
+        <button class="layui-btn" type="button" id="ss" style="margin-left: 20px">搜索</button>
+            <hr class="layui-bg-gray">
+        </div>
+        </blockquote>
+        <#--<div style="margin-top: 20px;">-->
+            <#--<a>共搜索到</a><a id="count"> </a><a>首音乐</a>-->
+        <#--</div>-->
         <div>
-            <a>共搜索到</a><a id="count"> </a><a>首音乐</a>
+            <table id="musicList" lay-filter="music"></table>
         </div>
-        <div style="padding: 15px;">
-            <table class="layui-table" lay-skin="line">
-                <thead>
-                <tr>
-                    <th>歌名</th>
-                    <th>歌手</th>
-                    <th>专辑</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody id="list">
+            <#--<hr class="layui-bg-gray">-->
 
-                </tbody>
-            </table>
-        </div>
-        </div>
     </div>
     <div class="layui-footer" style="background: #0C0C0C;height: 70px;z-index: 10">
         <div class="audio-box">
@@ -158,6 +154,34 @@
 <script type="text/javascript" src="${basePath}/js/MyMusic.js"></script>
 <script type="text/javascript" src="${basePath}/js/jquery.blurr.js"></script>
 <script type="text/javascript" src="${basePath}/js/loadList.js"></script>
+<script id="music" type="text/html">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="play">播放</a>
+    <a class="layui-btn layui-btn-xs" lay-event="add">添加</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="download">下载</a>
+</script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        //监听工具条
+        table.on('tool(music)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'play'){
+                layer.msg('播放：'+ data.musicName);
+                play(data.fileHash);//播放歌曲
+            } else if(obj.event === 'add'){
+                add(data.fileHash,data.musicName);
+            } else if(obj.event === 'download'){
+                download(data.fileHash,data.hqHash,data.sqHash);
+            }
+        });
+//        $('.demoTable .layui-btn').on('click', function(){
+//            var type = $(this).data('type');
+//            active[type] ? active[type].call(this) : '';
+//        });
+    });
+</script>
+
+
 <script>
     var id =${user.id};
     $("#addList").click(function () {
@@ -203,15 +227,14 @@
                                 for (var i = 0; i < data.length; i++) {
                                      console.log(data);
                                     $("#lb").append("<dd><a href='javascript:xs(\""+data[i].id+"\",\""+i+"\");'>" + data[i].name + "</a></dd>");
-                                    element.init();
+
                                 }
+
                             }
                         });
+                        element.init();
                     }
                 });
-
-
-            <#--//location=location;-->
             });
         });
     });
@@ -222,8 +245,9 @@
         var element = layui.element;
 
     });
+    var form;
     layui.use('form', function () {
-        var form = layui.form;
+        form = layui.form;
         form.render();
     });
     $(function () {
@@ -266,6 +290,9 @@
         /* 当前播放曲目的对象 */
         //console.log(audioFn.audio);
     });
+</script>
+<script>
+
 </script>
 <script type="text/javascript" src="${basePath}/js/MyMusic.js"></script>
 </body>
