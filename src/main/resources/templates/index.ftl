@@ -14,9 +14,11 @@
     <form class="layui-form">
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <input type="radio" name="downloadmusic" value="hash" title="标准品质" checked="">
-                <input type="radio" name="downloadmusic" value="HQHash" title="HQ高品质">
-                <input type="radio" name="downloadmusic" value="SQHash" title="SQ无损品质">
+                <input type="radio" name="downloadmusic" value="m4a" title="流畅品质(m4a)">
+                <input type="radio" name="downloadmusic" value="mp3_l" title="标准品质(mp3)" checked="">
+                <input type="radio" name="downloadmusic" value="mp3_h" title="HQ高品质(mp3)">
+                <input type="radio" name="downloadmusic" value="ape" title="无损品质(ape)">
+                <input type="radio" name="downloadmusic" value="flac" title="无损品质(flac)">
             </div>
         </div>
     </form>
@@ -83,21 +85,15 @@
         </div>
     </div>
     <div class="layui-body">
-        <blockquote class="layui-elem-quote">
         <div id="ss_content" name="b_content" style="margin-top: 20px;">
         <input class="layui-input" type="text" id="wd" style="width: 200px;float: left">
         <button class="layui-btn" type="button" id="ss" style="margin-left: 20px">搜索</button>
             <hr class="layui-bg-gray">
-        </div>
-        </blockquote>
-        <#--<div style="margin-top: 20px;">-->
-            <#--<a>共搜索到</a><a id="count"> </a><a>首音乐</a>-->
-        <#--</div>-->
         <div>
             <table id="musicList" lay-filter="music"></table>
         </div>
             <#--<hr class="layui-bg-gray">-->
-
+    </div>
     </div>
     <div class="layui-footer" style="background: #0C0C0C;height: 70px;z-index: 10">
         <div class="audio-box">
@@ -166,12 +162,15 @@
         table.on('tool(music)', function(obj){
             var data = obj.data;
             if(obj.event === 'play'){
-                layer.msg('播放：'+ data.musicName);
-                play(data.fileHash);//播放歌曲
+                layer.msg('播放：'+ data.musicName+" - "+data.singer);
+                // play(data.fileHash);//播放歌曲
+                qqPlay(data.mid,data.musicName+" - "+data.singer);
             } else if(obj.event === 'add'){
-                add(data.fileHash,data.musicName);
+                add(data.mid,data.musicName);
             } else if(obj.event === 'download'){
-                download(data.fileHash,data.hqHash,data.sqHash);
+                var mid=data.mid;
+                layer.msg(mid);
+                download(mid,data.musicName+" - "+data.singer);
             }
         });
 //        $('.demoTable .layui-btn').on('click', function(){

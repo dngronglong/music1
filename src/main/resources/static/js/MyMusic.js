@@ -1,5 +1,6 @@
 var basePath=$("#basePath").val();
 var userId=$("#userId").val();
+
 //歌词处理
 
 function lyric_ctrl(lrc_content) {
@@ -33,7 +34,8 @@ $(function () {
                 //,height: 315
                 ,where:{"words":words}
                 ,url: basePath+"/mic/search" //数据接口
-                //,page: true //开启分页
+                ,page: true //开启分页
+                ,limit:30
                 ,cols: [[ //表头
                     {field: 'musicName', title: '歌曲',sort: true, fixed: 'left'}
                     ,{field: 'singer', title: '歌手'}
@@ -81,8 +83,8 @@ function lrc(audioFn) {
 //播放音乐
 function play(hash) {
     //alert(hash);
-    var song = [];
     var lrc_content="";
+    var song=[];
     $.ajax({
         url: basePath+'/mic/play',
         type: 'POST', //GET
@@ -109,34 +111,23 @@ function play(hash) {
     })
 }
 //下载音乐
-function download(fileHash,hqHash,sqHash) {
+function download(mide,musicName) {
     var element = layui.element;
     element.init();
+    //alert(mide);
     var layer = layui.layer;
-    $("input[name='downloadmusic']:eq(0)").val(fileHash);
-    if (hqHash!="00000000000000000000000000000000"){
-        $("input[name='downloadmusic']:eq(1)").val(hqHash);
-    }else {
-        $("input[name='downloadmusic']:eq(1)").attr("disabled","");
-    }
-    if (sqHash!="00000000000000000000000000000000"){
-        $("input[name='downloadmusic']:eq(2)").val(sqHash);
-    }else {
-        $("input[name='downloadmusic']:eq(2)").attr("disabled","");
-    }
         var index=layer.open({
             type:1,
             title:"下载",
             btn: ['确定', '取消'], //可以无限个按钮
             yes: function () {
-                var hash=$("input[name='downloadmusic']:checked").val();
+                var quality=$("input[name='downloadmusic']:checked").val();
                 $.ajax({
                     url: basePath+'/mic/getUrl',
                     type: 'POST', //GET
                     async: true,    //或false,是否异步
-                    data: "hash="+hash,
+                    data: {"mid":mide,"quality":quality,"musicName":musicName},
                     dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-
                     success: function (data) {
                         console.log(data);
                         layer.close(index);
@@ -206,7 +197,7 @@ function add(hash,name,id) {
 
             },
             btn2:function () {
-                
+
             },
             content:$("#box1"),
         });
@@ -245,11 +236,45 @@ function xs(id,index_id) {
         }
     }
 }
+function qqPlay(mid,musicName) {
+    var lrc_content="";
+    var song = [];
+    $.ajax({
+        url: basePath+'/mic/Qplay',
+        type: 'POST', //GET
+        async: true,    //或false,是否异步
+        data: {"mid": mid,"musicName":musicName},
+        dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+        success: function (data) {
+            console.log(data);
+            song.push({
+                'cover': data.cover,
+                'src': data.mp3_l,
+                'title': data.audio_name
+            });
+            //console.log(song);
+            var audioFn = audioPlay({
+                song: song,
+                autoPlay: true  //是否立即播放第一首，autoPlay为true且song为空，会alert文本提示并退出
+            });
+            $("#lrc_content").val(data.lrc);
+            lrc_content = $("#lrc_content").val();
+            $("#img").css("background-image","url('"+data.cover+"')");
+            lyric_ctrl(lrc_content);
+            lrc(audioFn);
+        }
+    })
+}
 function qk() {
     $("[name='b_content']").siblings().css("display","none");
     $("#ss_content").css("display","block");
 }
-function downloadFile(url,name,type){
-    //alert(url);
-    window.open(basePath+"/download?name="+name+"&url="+url);
+function downloadFile(url,name){
+    console.log(url);
+    var ul = basePath + '/download';
+    var fileName = name;
+    var form = $("<form></form>").attr("action", ul).attr("method", "post");
+    form.append($("<input></input>").attr("type", "hidden").attr("name", "fileName").attr("value", fileName));
+    form.append($("<input></input>").attr("type", "hidden").attr("name", "url").attr("value", url));
+    form.appendTo('body').submit().remove();
 }

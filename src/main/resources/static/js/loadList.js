@@ -29,7 +29,7 @@ window.onload=function (ev) {
             if(staes===0){
                 layui.use('layer', function () {
                     var layer = layui.layer;
-                    layer.msg("1.优化了页面的加载速度及逻辑<br> 2.修复添加歌曲到列表");
+                    layer.msg("更新日期 2017年5月23日 16点20分<br>1.优化了页面的加载速度及逻辑<br> 2.修复添加歌曲到列表<br> 3.新增无损下载（播放默认标准品质）");
                 })
                 staes++;
                 //layer.msg(staes);

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,29 +40,31 @@ public class MusicController {
     @GetMapping(value = "/search",produces= {"application/json;charset=utf-8"})
     @ResponseBody
     public LayBean search(String words,int page,int limit) {
-        //System.out.println(words);
-        JSONObject jsonObject=JSONObject.fromObject(GetUrl.getJson(words).replace("<em>","").replace("<\\/em>",""));
-        JSONObject jsonObject1=JSONObject.fromObject(jsonObject.get("data"));
-        JSONArray jsonObject2=JSONArray.fromObject(jsonObject1.get("lists"));
-        List<MusicBean> musicList=new ArrayList<>();
-        for (int i=0;i<jsonObject2.size();i++) {
-            MusicBean musicBean=new MusicBean();
-            musicBean.setMusicName(jsonObject2.getJSONObject(i).getString("SongName"));
-            musicBean.setSinger(jsonObject2.getJSONObject(i).getString("SingerName"));
-            musicBean.setAlbum(jsonObject2.getJSONObject(i).getString("AlbumName"));
-            musicBean.setFileHash(jsonObject2.getJSONObject(i).getString("FileHash"));
-            musicBean.setHqHash(jsonObject2.getJSONObject(i).getString("HQFileHash"));
-            musicBean.setSqHash(jsonObject2.getJSONObject(i).getString("SQFileHash"));
-            musicList.add(musicBean);
-        }
+//        JSONObject jsonObject=JSONObject.fromObject(GetUrl.getJson(words,page,limit).replace("<em>","").replace("<\\/em>",""));
+//        JSONObject jsonObject1=JSONObject.fromObject(jsonObject.get("data"));
+//        JSONArray jsonObject2=JSONArray.fromObject(jsonObject1.get("lists"));
+//        String count=jsonObject1.getString("total");
+//        List<MusicBean> musicList=new ArrayList<>();
+//        for (int i=0;i<jsonObject2.size();i++) {
+//            MusicBean musicBean=new MusicBean();
+//            musicBean.setMusicName(jsonObject2.getJSONObject(i).getString("SongName"));
+//            musicBean.setSinger(jsonObject2.getJSONObject(i).getString("SingerName"));
+//            musicBean.setAlbum(jsonObject2.getJSONObject(i).getString("AlbumName"));
+//            musicBean.setFileHash(jsonObject2.getJSONObject(i).getString("FileHash"));
+//            musicBean.setHqHash(jsonObject2.getJSONObject(i).getString("HQFileHash"));
+//            musicBean.setSqHash(jsonObject2.getJSONObject(i).getString("SQFileHash"));
+//            musicList.add(musicBean);
+//        }
+
         LayBean layBean=new LayBean();
         layBean.setCode("0");
-        layBean.setData(musicList);
+        layBean.setData(GetUrl.qqMusicUtil(words));
+        layBean.setCount("30");
         //System.out.println(layBean);
         return layBean;
     }
     @RequestMapping("/play")
-    public MusicBean play(String hash){
+    public MusicBean play(String hash) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         String json=GetUrl.getUrl(hash);
         MusicBean musicBean=new MusicBean();
         JSONObject jsonObject=JSONObject.fromObject(json);
@@ -70,6 +74,10 @@ public class MusicController {
         musicBean.setUrl(jsonObject1.getString("play_url"));
         musicBean.setAudio_name(jsonObject1.getString("audio_name"));
         return musicBean;
+    }
+    @RequestMapping("/Qplay")
+    public MusicBean qPlay(String mid,String musicName){
+        return GetUrl.qqUrl(mid,musicName);
     }
     @RequestMapping(value = "/addList")
     public void addList(String listName,int id){
@@ -106,15 +114,28 @@ public class MusicController {
     public List<SongBean> find(Integer userId,Integer listId){
         return songRepository.findById(listId,userId);
     }
+
     @RequestMapping("/getUrl")
-    public MusicBean getUrl(String hash){
-        String json=GetUrl.getUrl(hash);
-        MusicBean musicBean=new MusicBean();
-        JSONObject jsonObject=JSONObject.fromObject(json);
-        JSONObject jsonObject1=JSONObject.fromObject(jsonObject.get("data"));
-        //System.out.println(jsonObject1);
-        musicBean.setUrl(jsonObject1.getString("play_url"));
-        musicBean.setAudio_name(jsonObject1.getString("audio_name"));
+    public MusicBean getUrl(String mid,String quality,String musicName){
+//        String json=GetUrl.getUrl(mid);
+        System.out.println(mid+","+quality);
+        MusicBean musicBean=GetUrl.qqUrl(mid,musicName);
+        if (quality.equals("m4a")){
+            musicBean.setUrl(musicBean.getM4a());
+            musicBean.setAudio_name(musicBean.getAudio_name()+".m4a");
+        }else if(quality.equals("mp3_l")){
+            musicBean.setUrl(musicBean.getMp3_l());
+            musicBean.setAudio_name(musicBean.getAudio_name()+".mp3");
+        }else if(quality.equals("mp3_h")){
+            musicBean.setUrl(musicBean.getMp3_h());
+            musicBean.setAudio_name(musicBean.getAudio_name()+".mp3");
+        }else if(quality.equals("ape")){
+            musicBean.setUrl(musicBean.getApe());
+            musicBean.setAudio_name(musicBean.getAudio_name()+".ape");
+        }else if(quality.equals("flac")){
+            musicBean.setUrl(musicBean.getFlac());
+            musicBean.setAudio_name(musicBean.getAudio_name()+".flac");
+        }
         return musicBean;
     }
 }

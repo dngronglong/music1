@@ -16,24 +16,27 @@ import java.net.URLConnection;
 @Controller
 public class DownLoadController {
     @RequestMapping("/download")
-    public String download(String name, String url, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("utf-8");
         response.setCharacterEncoding("utf-8");
-        //System.out.println(url);
+        String name=request.getParameter("fileName");
+        String url=request.getParameter("url");
+        System.out.println(url);
         URL ul = new URL(url);
-        String[] arr = url.split("\\.");
-        String type = "." + arr[4];
-        String fileName = name;
+        System.out.println(ul);
+        String []t = name.split("\\.");
+        String type="."+t[1];
+        String fileName = "";
         String agent = (String) request.getHeader("USER-AGENT");
 //        解决火狐浏览器下载文件名乱码
         if (agent != null && agent.toLowerCase().indexOf("firefox") > 0) {
-            fileName = "=?UTF-8?B?" + (new String(Base64.encodeBase64(fileName.getBytes("UTF-8")))) + "?=";
+            fileName = "=?UTF-8?B?" + (new String(Base64.encodeBase64(t[0].getBytes("UTF-8")))) + "?=";
         } else {
-            fileName = java.net.URLEncoder.encode(fileName, "UTF-8");
+            fileName = java.net.URLEncoder.encode(t[0].replace("%28","(").replace("%29",")"), "UTF-8");
+            fileName=fileName.replace("+"," ");
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", fileName + type);
         response.setHeader("Content-Disposition", "attachment;fileName="
                 + fileName + type);
         InputStream fis = null;
@@ -48,7 +51,5 @@ public class DownLoadController {
             // TODO: handle exception
             e.printStackTrace();
         }
-        return null;
     }
-
 }

@@ -23,8 +23,62 @@ public class MusicBean implements Serializable {
     private String lrc;
     //歌名
     private String audio_name;
+    private String mid;//qq音乐mid
+    private String m4a;
+    private String mp3_l;//
+    private String mp3_h;
+    private String ape;
+    private String flac;
 
     public MusicBean() {
+    }
+
+    public String getMid() {
+        return mid;
+    }
+
+    public String getM4a() {
+        return m4a;
+    }
+
+    public void setM4a(String m4a) {
+        this.m4a = m4a;
+    }
+
+    public String getMp3_l() {
+        return mp3_l;
+    }
+
+    public void setMp3_l(String mp3_l) {
+        this.mp3_l = mp3_l;
+    }
+
+    public String getMp3_h() {
+        return mp3_h;
+    }
+
+    public void setMp3_h(String mp3_h) {
+        this.mp3_h = mp3_h;
+    }
+
+    public String getApe() {
+        return ape;
+    }
+
+    public void setApe(String ape) {
+        this.ape = ape;
+    }
+
+    public String getFlac() {
+        return flac;
+    }
+
+    public void setFlac(String flac) {
+        this.flac = flac;
+    }
+
+    public void setMid(String mid) {
+        this.mid = mid;
     }
 
     public String getAudio_name() {
@@ -120,6 +174,12 @@ public class MusicBean implements Serializable {
                 ", url='" + url + '\'' +
                 ", lrc='" + lrc + '\'' +
                 ", audio_name='" + audio_name + '\'' +
+                ", mid='" + mid + '\'' +
+                ", m4a='" + m4a + '\'' +
+                ", mp3_l='" + mp3_l + '\'' +
+                ", mp3_h='" + mp3_h + '\'' +
+                ", ape='" + ape + '\'' +
+                ", flac='" + flac + '\'' +
                 '}';
     }
 }
