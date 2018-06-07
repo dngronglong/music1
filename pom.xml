@@ -29,6 +29,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		<!-- 引入Web模块 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -107,11 +108,26 @@
             <scope>provided</scope>
         </dependency>
 
+		<!--Gson 是google解析Json的一个开源框架,同类的框架fastJson,JackJson等等-->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.4</version>
+		</dependency>
+
+		<!--HttpClient工具类-->
+		<dependency>
+			<groupId>com.arronlong</groupId>
+			<artifactId>httpclientutil</artifactId>
+			<version>1.0</version>
+		</dependency>
+
 
 	</dependencies>
 
 	<build>
 		<plugins>
+			<!--maven打包时应用-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -122,6 +138,7 @@
 			</plugin>
 
 		</plugins>
+		<!--打包时生成的文件名-->
 		<finalName>music</finalName>
 	</build>
 
