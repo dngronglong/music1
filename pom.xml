@@ -122,6 +122,7 @@
 			</plugin>
 
 		</plugins>
+		<finalName>music</finalName>
 	</build>
 
 
