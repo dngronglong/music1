@@ -58,7 +58,8 @@ public class MusicController {
 
         LayBean layBean=new LayBean();
         layBean.setCode("0");
-        layBean.setData(GetUrl.qqMusicUtil(words));
+//        layBean.setData(GetUrl.qqMusicUtil(words));
+        layBean.setData(GetUrl.getMusicList(words));
         layBean.setCount("30");
         //System.out.println(layBean);
         return layBean;

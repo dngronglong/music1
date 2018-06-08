@@ -1,7 +1,13 @@
 package com.dong.music.utils;
 
 
+import com.arronlong.httpclientutil.HttpClientUtil;
+import com.arronlong.httpclientutil.common.HttpConfig;
+import com.arronlong.httpclientutil.exception.HttpProcessException;
+import com.dong.music.beans.Music;
 import com.dong.music.beans.MusicBean;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import sun.misc.BASE64Encoder;
@@ -103,9 +109,42 @@ public class GetUrl {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+
+
 //        System.out.println(json);
         return JSONObject.fromObject(json.toString());
     }
+
+    public static List<Music.Song> getMusicList(String word) {
+        String url="http://s.music.qq.com/fcgi-bin/music_search_new_platform?t=0&n=30&aggr=1&cr=1&loginUin=0&format=json&inCharset=GB2312&outCharset=utf-8&notice=0&platform=jqminiframe.json&needNewCode=0&p=1&catZhida=0&remoteplace=sizer.newclient.next_song&w="+word;
+        HttpConfig httpConfig = HttpConfig.custom().url(url);
+        try {
+            String response = HttpClientUtil.send(httpConfig);
+            Gson gson = new Gson();
+            Music music = gson.fromJson(response, Music.class);//new TypeToken<Music>(){}.getType()
+            List<Music.Song> musicList = music.getData().getSong().getList();
+            musicList.forEach((song)->{
+                String f = song.getF();
+                String []j=f.split("\\|");
+                if (j.length==1){
+                    song.setAlbum("");
+                }else {
+                    song.setMid(j[20]);
+                    song.setAlbum(song.getSinger());
+                }
+            });
+            return  musicList;
+        } catch (HttpProcessException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
+
+
     public static List<MusicBean> qqMusicUtil(String word){
         JSONObject jsonObject=GetUrl.getMid(word);
         JSONObject jsonObject1=JSONObject.fromObject(jsonObject.getString("data"));
