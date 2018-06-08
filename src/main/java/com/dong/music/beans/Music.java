@@ -57,6 +57,7 @@ public class Music implements Serializable {
         private String singer;
         private String album;
         private String mid;
+        private String lyricSrc;
 
         public String getF() {
             return f;
@@ -96,6 +97,14 @@ public class Music implements Serializable {
 
         public void setMid(String mid) {
             this.mid = mid;
+        }
+
+        public String getLyricSrc() {
+            return lyricSrc;
+        }
+
+        public void setLyricSrc(String lyricSrc) {
+            this.lyricSrc = lyricSrc;
         }
     }
 }
