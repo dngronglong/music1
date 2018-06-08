@@ -109,10 +109,6 @@ public class GetUrl {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
-
 //        System.out.println(json);
         return JSONObject.fromObject(json.toString());
     }
