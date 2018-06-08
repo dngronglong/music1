@@ -25,41 +25,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetUrl {
-    public static String getJson(String url,int page,int limit){
+    public static String getJson(String url, int page, int limit) {
         try {
-            url= URLEncoder.encode(url,"utf-8");
+            url = URLEncoder.encode(url, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         StringBuilder json = new StringBuilder();
-        String ur="http://songsearch.kugou.com/song_search_v2?callback=jQuery191034642999175022426_1489023388639&keyword="+url+"&page="+page+"&pagesize="+limit+"&userid=-1&clientver=&platform=WebFilter&tag=em&filter=2&iscorrection=1&privilege_filter=0&_=1489023388641";
+        String ur = "http://songsearch.kugou.com/song_search_v2?callback=jQuery191034642999175022426_1489023388639&keyword=" + url + "&page=" + page + "&pagesize=" + limit + "&userid=-1&clientver=&platform=WebFilter&tag=em&filter=2&iscorrection=1&privilege_filter=0&_=1489023388641";
         try {
-            URL urlObject=new URL(ur);
-            URLConnection uc=urlObject.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(),"utf-8"));
+            URL urlObject = new URL(ur);
+            URLConnection uc = urlObject.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), "utf-8"));
             String inputLine = null;
-            while ( (inputLine = in.readLine()) != null) {
+            while ((inputLine = in.readLine()) != null) {
                 json.append(inputLine);
             }
             in.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String js=json.toString().replace("jQuery191034642999175022426_1489023388639","").replace("(","").replace(")","");
+        String js = json.toString().replace("jQuery191034642999175022426_1489023388639", "").replace("(", "").replace(")", "");
         return js;
     }
+
     public static String getUrl(String hash) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        String url="http://www.kugou.com/yy/index.php?r=play/getdata&hash="+hash;
+        String url = "http://www.kugou.com/yy/index.php?r=play/getdata&hash=" + hash;
 //        String mD = GetMD5(hash + "kgcloud");
 //        System.out.println(mD);
 //        String url="http://trackercdn.kugou.com/i/?cmd=4&hash="+ hash+ "&key="+mD+ "&pid=1&forceDown=0&vip=1";
         StringBuilder json = new StringBuilder();
         try {
-            URL urlObject=new URL(url);
-            URLConnection uc=urlObject.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(),"utf-8"));
+            URL urlObject = new URL(url);
+            URLConnection uc = urlObject.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), "utf-8"));
             String inputLine = null;
-            while ( (inputLine = in.readLine()) != null) {
+            while ((inputLine = in.readLine()) != null) {
                 json.append(inputLine);
             }
             in.close();
@@ -84,25 +85,26 @@ public class GetUrl {
             throw new RuntimeException("MD5加密错误:" + e.getMessage(), e);
         }
     }
-    public static String fillMD5(String md5){
-        return md5.length()==32?md5:fillMD5("0"+md5);
+
+    public static String fillMD5(String md5) {
+        return md5.length() == 32 ? md5 : fillMD5("0" + md5);
     }
 
-    public static JSONObject getMid(String word){
+    public static JSONObject getMid(String word) {
         try {
-            word= URLEncoder.encode(word,"utf-8");
+            word = URLEncoder.encode(word, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String url="http://s.music.qq.com/fcgi-bin/music_search_new_platform?t=0&n=30&aggr=1&cr=1&loginUin=0&format=json&inCharset=GB2312&outCharset=utf-8&notice=0&platform=jqminiframe.json&needNewCode=0&p=1&catZhida=0&remoteplace=sizer.newclient.next_song&w=";
-        url+=word;
+        String url = "http://s.music.qq.com/fcgi-bin/music_search_new_platform?t=0&n=30&aggr=1&cr=1&loginUin=0&format=json&inCharset=GB2312&outCharset=utf-8&notice=0&platform=jqminiframe.json&needNewCode=0&p=1&catZhida=0&remoteplace=sizer.newclient.next_song&w=";
+        url += word;
         StringBuilder json = new StringBuilder();
         try {
-            URL urlObject=new URL(url);
-            URLConnection uc=urlObject.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(),"utf-8"));
+            URL urlObject = new URL(url);
+            URLConnection uc = urlObject.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), "utf-8"));
             String inputLine = null;
-            while ( (inputLine = in.readLine()) != null) {
+            while ((inputLine = in.readLine()) != null) {
                 json.append(inputLine);
             }
             in.close();
@@ -114,24 +116,24 @@ public class GetUrl {
     }
 
     public static List<Music.Song> getMusicList(String word) {
-        String url="http://s.music.qq.com/fcgi-bin/music_search_new_platform?t=0&n=30&aggr=1&cr=1&loginUin=0&format=json&inCharset=GB2312&outCharset=utf-8&notice=0&platform=jqminiframe.json&needNewCode=0&p=1&catZhida=0&remoteplace=sizer.newclient.next_song&w="+word;
+        String url = "http://s.music.qq.com/fcgi-bin/music_search_new_platform?t=0&n=30&aggr=1&cr=1&loginUin=0&format=json&inCharset=GB2312&outCharset=utf-8&notice=0&platform=jqminiframe.json&needNewCode=0&p=1&catZhida=0&remoteplace=sizer.newclient.next_song&w=" + word;
         HttpConfig httpConfig = HttpConfig.custom().url(url);
         try {
             String response = HttpClientUtil.send(httpConfig);
             Gson gson = new Gson();
             Music music = gson.fromJson(response, Music.class);//new TypeToken<Music>(){}.getType()
             List<Music.Song> musicList = music.getData().getSong().getList();
-            musicList.forEach((song)->{
+            musicList.forEach((song) -> {
                 String f = song.getF();
-                String []j=f.split("\\|");
-                if (j.length==1){
+                String[] j = f.split("\\|");
+                if (j.length == 1) {
                     song.setAlbum("");
-                }else {
+                } else {
                     song.setMid(j[20]);
                     song.setAlbum(song.getSinger());
                 }
             });
-            return  musicList;
+            return musicList;
         } catch (HttpProcessException e) {
             e.printStackTrace();
         }
@@ -141,22 +143,22 @@ public class GetUrl {
     }
 
 
-    public static List<MusicBean> qqMusicUtil(String word){
-        JSONObject jsonObject=GetUrl.getMid(word);
-        JSONObject jsonObject1=JSONObject.fromObject(jsonObject.getString("data"));
-        JSONObject jsonObject2=JSONObject.fromObject(jsonObject1.getString("song"));
-        JSONArray jsonObject3=JSONArray.fromObject(jsonObject2.getString("list"));
-        List<MusicBean> list=new ArrayList<>();
-        for (int i=0;i<jsonObject3.size();i++){
-            MusicBean musicBean=new MusicBean();
-            String s=jsonObject3.getJSONObject(i).getString("f");
-            String []j=s.split("\\|");
-            if (j.length==1){
-                j=j[0].split("@@");
+    public static List<MusicBean> qqMusicUtil(String word) {
+        JSONObject jsonObject = GetUrl.getMid(word);
+        JSONObject jsonObject1 = JSONObject.fromObject(jsonObject.getString("data"));
+        JSONObject jsonObject2 = JSONObject.fromObject(jsonObject1.getString("song"));
+        JSONArray jsonObject3 = JSONArray.fromObject(jsonObject2.getString("list"));
+        List<MusicBean> list = new ArrayList<>();
+        for (int i = 0; i < jsonObject3.size(); i++) {
+            MusicBean musicBean = new MusicBean();
+            String s = jsonObject3.getJSONObject(i).getString("f");
+            String[] j = s.split("\\|");
+            if (j.length == 1) {
+                j = j[0].split("@@");
                 musicBean.setMusicName(jsonObject3.getJSONObject(i).getString("fsong"));
                 musicBean.setAlbum("");
                 musicBean.setSinger(jsonObject3.getJSONObject(i).getString("fsinger"));
-            }else {
+            } else {
                 musicBean.setMusicName(jsonObject3.getJSONObject(i).getString("fsong"));
                 musicBean.setAlbum(jsonObject3.getJSONObject(i).getString("fsinger"));
                 musicBean.setSinger(j[3]);
@@ -168,20 +170,21 @@ public class GetUrl {
         //System.out.println(list);
         return list;
     }
-    public static MusicBean qqUrl(String mid,String musicName){
+
+    public static MusicBean qqUrl(String mid, String musicName) {
         try {
-            mid= URLEncoder.encode(mid,"utf-8");
+            mid = URLEncoder.encode(mid, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String url="http://www.douqq.com/qqmusic/qqapi.php?mid="+mid;
+        String url = "http://www.douqq.com/qqmusic/qqapi.php?mid=" + mid;
         StringBuilder json = new StringBuilder();
         try {
-            URL urlObject=new URL(url);
-            URLConnection uc=urlObject.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(),"utf-8"));
+            URL urlObject = new URL(url);
+            URLConnection uc = urlObject.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream(), "utf-8"));
             String inputLine = null;
-            while ( (inputLine = in.readLine()) != null) {
+            while ((inputLine = in.readLine()) != null) {
                 json.append(inputLine);
             }
             in.close();
@@ -189,11 +192,11 @@ public class GetUrl {
             e.printStackTrace();
         }
         //String s=json.toString().replace("\\","");
-        JSONObject jsonObject=JSONObject.fromObject(json.substring(1,json.length()-1).replace("\\\"","\""));
+        JSONObject jsonObject = JSONObject.fromObject(json.substring(1, json.length() - 1).replace("\\\"", "\""));
         System.out.println(jsonObject);
-        MusicBean musicBean=new MusicBean();
+        MusicBean musicBean = new MusicBean();
         musicBean.setAudio_name(musicName);
-        jsonObject=JSONObject.fromObject(json.substring(1,json.length()-1).replace("\\",""));
+        jsonObject = JSONObject.fromObject(json.substring(1, json.length() - 1).replace("\\", ""));
         musicBean.setM4a(jsonObject.getString("m4a"));
         musicBean.setMp3_l(jsonObject.getString("mp3_l"));
         musicBean.setMp3_h(jsonObject.getString("mp3_h"));
