@@ -131,11 +131,11 @@ public class GetUrl {
             musicList.forEach((song) -> {
                 String f = song.getF();
                 String[] j = f.split("\\|");
-                String lyricSrc = "http://music.qq.com/miniportal/static/lyric/"+String.valueOf(Integer.valueOf(j[0]) % 100) + "/" +String.valueOf(j[0])+".xml";
-                song.setLyricSrc(lyricSrc);
                 if (j.length == 1) {
                     song.setAlbum("");
                 } else {
+                    String lyricSrc = "http://music.qq.com/miniportal/static/lyric/"+String.valueOf(Integer.valueOf(j[0]) % 100) + "/" +String.valueOf(j[0])+".xml";
+                    song.setLyricSrc(lyricSrc);
                     song.setMid(j[20]);
                     song.setAlbum(song.getSinger());
                 }
