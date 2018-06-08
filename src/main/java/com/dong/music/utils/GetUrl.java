@@ -10,12 +10,17 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import sun.misc.BASE64Encoder;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -126,6 +131,8 @@ public class GetUrl {
             musicList.forEach((song) -> {
                 String f = song.getF();
                 String[] j = f.split("\\|");
+                String lyricSrc = "http://music.qq.com/miniportal/static/lyric/"+String.valueOf(Integer.valueOf(j[0]) % 100) + "/" +String.valueOf(j[0])+".xml";
+                song.setLyricSrc(lyricSrc);
                 if (j.length == 1) {
                     song.setAlbum("");
                 } else {
@@ -140,6 +147,27 @@ public class GetUrl {
 
         return null;
 
+    }
+
+    public static String getLyric(String lyricSrc) {
+        lyricSrc = "http://music.qq.com/miniportal/static/lyric/68/101803868.xml";
+        HttpConfig httpConfig = HttpConfig.custom().url(lyricSrc).encoding("GB2312");
+
+        try {
+            String response = HttpClientUtil.send(httpConfig);
+            SAXReader saxReader = new SAXReader();
+            Document document = saxReader.read(new URL(lyricSrc));
+            Element rootElm = document.getRootElement();
+            return rootElm.getText();
+        } catch (HttpProcessException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 
