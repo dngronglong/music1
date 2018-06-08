@@ -7,101 +7,95 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Music implements Serializable {
-	
-	private static final long serialVersionUID = 1439471589260104744L;
-	
-	private SongData data = new SongData();
 
-	public SongData getData() {
-		return data;
-	}
+    private static final long serialVersionUID = 1439471589260104744L;
 
-	public void setData(SongData data) {
-		this.data = data;
-	}
+    private SongData data = new SongData();
 
-	public class SongData {
-		
-		private SongList song = new SongList();
+    public SongData getData() {
+        return data;
+    }
 
-		public SongList getSong() {
-			return song;
-		}
+    public void setData(SongData data) {
+        this.data = data;
+    }
 
-		public void setSong(SongList song) {
-			this.song = song;
-		}
+    public class SongData {
 
-	}
+        private SongList song = new SongList();
 
-	public class SongList {
-		
-		private List<Song> list = new ArrayList<Song>();
+        public SongList getSong() {
+            return song;
+        }
 
-		public List<Song> getList() {
-			return list;
-		}
+        public void setSong(SongList song) {
+            this.song = song;
+        }
 
-		public void setList(List<Song> list) {
-			this.list = list;
-		}
+    }
 
-	}
+    public class SongList {
 
-	public class Song {
-		
-		private String f;
-		@SerializedName("fsong")
-		private String musicName;
-		@SerializedName("fsinger")
-		private String singer;
-		private String album;
-		private String mid;
+        private List<Song> list = new ArrayList<Song>();
 
-		public String getF() {
-			return f;
-		}
+        public List<Song> getList() {
+            return list;
+        }
 
-		public void setF(String f) {
-			this.f = f;
-			String []j=f.split("\\|");
-			if (j.length==1){
-				this.setAlbum("");
-			}else {
-				this.setMid(j[20]);
-			}
-		}
+        public void setList(List<Song> list) {
+            this.list = list;
+        }
 
-		public String getMusicName() {
-			return musicName;
-		}
+    }
 
-		public void setMusicName(String musicName) {
-			this.musicName = musicName;
-		}
+    public class Song {
 
-		public String getSinger() {
-			return singer;
-		}
+        private String f;
+        @SerializedName("fsong")
+        private String musicName;
+        @SerializedName("fsinger")
+        private String singer;
+        private String album;
+        private String mid;
 
-		public void setSinger(String singer) {
-			this.singer = singer;
-		}
+        public String getF() {
+            return f;
+        }
 
-		public String getAlbum() {
-			return album;
-		}
+        public void setF(String f) {
+            this.f = f;
+        }
 
-		public void setAlbum(String album) {
-			this.album = album;
-		}
+        public String getMusicName() {
+            return musicName;
+        }
 
-		public String getMid() {
-			return mid;
-		}
+        public void setMusicName(String musicName) {
+            this.musicName = musicName;
+        }
 
-		public void setMid(String mid) {
-			this.mid = mid;
-		}
-	}
+        public String getSinger() {
+            return singer;
+        }
+
+        public void setSinger(String singer) {
+            this.singer = singer;
+        }
+
+        public String getAlbum() {
+            return album;
+        }
+
+        public void setAlbum(String album) {
+            this.album = album;
+        }
+
+        public String getMid() {
+            return mid;
+        }
+
+        public void setMid(String mid) {
+            this.mid = mid;
+        }
+    }
 }
